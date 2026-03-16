@@ -2,3 +2,168 @@
 Node: nid008620
 Job ID: 50126477
 Time: Mon Mar 16 01:32:10 AM PDT 2026
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Step 1: uv sync ===
+
+=== Step 2: Verify imports ===
+verifiers OK
+Format: Budget: 2048/8192 tokens generated. ~6144 tokens remaining.
+rg_mix_env OK
+All imports OK
+
+=== Step 3: Unit tests ===
+============================= test session starts ==============================
+platform linux -- Python 3.12.11, pytest-9.0.2, pluggy-1.6.0 -- /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /pscratch/sd/s/siddart2/budget-injection/budget_injection_env
+configfile: pyproject.toml
+plugins: jaxtyping-0.3.9, anyio-4.12.1, typeguard-4.5.1
+collecting ... collected 9 items
+
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_absolute_format PASSED [ 11%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_ratio_format PASSED [ 22%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_urgency_early PASSED [ 33%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_urgency_mid PASSED [ 44%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_urgency_late PASSED [ 55%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_minimal_format PASSED [ 66%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_custom_template PASSED [ 77%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_zero_remaining PASSED [ 88%]
+../budget_injection_env/budget_injection_env/tests/test_budget_injection.py::test_ratio_rounding PASSED [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7
+  /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class TunnelInfo(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 9 passed, 1 warning in 3.04s =========================
+
+=== Step 4: Smoke test (rg-mix-env, Qwen3-0.6B, 5 steps) ===
+[2m08:36:23[0m [1m   INFO[0m [1m[22mWrote subconfigs to outputs/smoke-rgmix/configs[0m[0m
+[2m08:36:23[0m [1m   INFO[0m [1m[22mUsing local->physical GPU mapping: {0: 0, 1: 1, 2: 2, 3: 3}[0m[0m
+[2m08:36:23[0m [1m   INFO[0m [1m[22mStarting RL run[0m[0m
+[2m08:36:23[0m [1m   INFO[0m [1m[22mStarting inference on GPU(s) 0 1[0m[0m
+[2m08:36:23[0m [1m   INFO[0m [1m[22mStarting orchestrator process[0m[0m
+[2m08:36:23[0m [1m   INFO[0m [1m[22mStarting trainer on GPU(s) 2 3[0m[0m
+[2m08:36:23[0m [32m[1mSUCCESS[0m [32m[1m[22mStartup complete. Showing trainer logs...[0m[0m
+W0316 08:37:02.460000 1112 torch/distributed/run.py:852] 
+W0316 08:37:02.460000 1112 torch/distributed/run.py:852] *****************************************
+W0316 08:37:02.460000 1112 torch/distributed/run.py:852] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0316 08:37:02.460000 1112 torch/distributed/run.py:852] *****************************************
+[default0]:[2m08:37:19[0m [1m   INFO[0m [1m[22mStarting RL trainer in World(world_size=2, rank=0, local_rank=0, local_world_size=2, num_nodes=1) in outputs/smoke-rgmix[0m[0m
+[default0]:[2m08:37:19[0m [1m   INFO[0m [1m[22mInitializing monitor (project='budget-injection-smoke' name='smoke-rgmix-trainer' offline=False id=None)[0m[0m
+[default0]:[2m08:37:19[0m [1m   INFO[0m [1m[22mInitializing WandbMonitor (project='budget-injection-smoke' name='smoke-rgmix-trainer' offline=False id=None)[0m[0m
+[default0]:wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+[default0]:wandb: Currently logged in as: siddarthegreat (swish) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+[default0]:wandb: setting up run 3nhyh0b5
+[default0]:wandb: Tracking run with wandb version 0.25.1
+[default0]:wandb: Run data is saved locally in outputs/smoke-rgmix/wandb/run-20260316_083719-3nhyh0b5
+[default0]:wandb: Run `wandb offline` to turn off syncing.
+[default0]:wandb: Syncing run smoke-rgmix-trainer
+[default0]:wandb: ⭐️ View project at https://wandb.ai/swish/budget-injection-smoke
+[default0]:wandb: 🚀 View run at https://wandb.ai/swish/budget-injection-smoke/runs/3nhyh0b5
+[default0]:wandb: Detected [anthropic, mcp, openai, agents, verifiers] in use.
+[default0]:wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+[default0]:wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mInitializing checkpoint managers (output_dir=None interval=5 weights=WeightCheckpointConfig(save_sharded=True, save_format='safetensors', save_adapter_separately=False) resume_step=None keep_last=None keep_interval=None skip_progress=False skip_scheduler=False skip_dataloader=False)[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mInitializing model (name='Qwen/Qwen3-0.6B' trust_remote_code=False seq_len=4096 attn='flash_attention_2' compile=None ac=ActivationCheckpointConfig(freq=1) ac_offloading=None fsdp_cpu_offload=False optim_cpu_offload=True reshard_after_forward=True dp_replicate=1 ep=1 tp=1 cp=1 impl='auto' optimization_dtype='float32' reduce_dtype='float32' moe_use_grouped_mm=True freeze_moe_router=False lora=None debug=DebugModelConfig(num_layers=None, random_init=False) fused_lm_head_token_chunk_size='disabled')[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mLoading model config (name=Qwen/Qwen3-0.6B, attn=flash_attention_2, trust_remote_code=False)[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mAuto-selected implementation: hf[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mLoading model Qwen/Qwen3-0.6B using AutoModelForCausalLM to meta device[0m[0m
+[default0]:[2m08:37:21[0m [33m[1mWARNING[0m [33m[1m[22mModel cannot be loaded using meta device because of buffers: ['model.rotary_emb.inv_freq', 'model.rotary_emb.original_inv_freq'][0m[0m
+[default0]:[2m08:37:21[0m [33m[1mWARNING[0m [33m[1m[22mCannot load model to meta device only, loading to CPU instead.[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mLoading model config (name=Qwen/Qwen3-0.6B, attn=flash_attention_2, trust_remote_code=False)[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mAuto-selected implementation: hf[0m[0m
+[default0]:[2m08:37:21[0m [1m   INFO[0m [1m[22mLoading model Qwen/Qwen3-0.6B using AutoModelForCausalLM to CPU[0m[0m
+[default0]:
+[default0]:Loading weights:   0%|          | 0/311 [00:00<?, ?it/s][default0]:
+[default0]:Loading weights:   0%|          | 1/311 [00:00<02:29,  2.08it/s]
+[default0]:Loading weights: 100%|██████████| 311/311 [00:00<00:00, 632.49it/s]
+[default0]:The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[default0]:[2m08:37:22[0m [1m   INFO[0m [1m[22mInjecting vanilla LM head[0m[0m
+[default0]:[2m08:37:23[0m [1m   INFO[0m [1m[22mApplied activation checkpointing (freq=1)[0m[0m
+[default0]:[2m08:37:23[0m [1m   INFO[0m [1m[22mBuilding 1-D device mesh with ['dp_shard'], [2][0m[0m
+[default0]:[2m08:37:23[0m [33m[1mWARNING[0m [33m[1m[22mModel uses tied word embeddings, so skipping the last-layer no-reshard optimization.[0m[0m
+[default0]:[2m08:37:23[0m [1m   INFO[0m [1m[22mInitializing tokenizer (name='Qwen/Qwen3-0.6B' trust_remote_code=False chat_template=None)[0m[0m
+[default0]:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mSetting up loss function (type='default' ipo_mask_low=0.2 ipo_mask_high=0.2 adv_tau=1.0 teacher_tau=0.0 kl_tau=0.001)[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mInitializing optimizer (lr=5e-06 weight_decay=0.01 max_norm=1.0 type='adamw' betas1=0.9 betas2=0.999)[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mWrapping optimizer with CPUOffloadOptimizer for optimizer state CPU offloading[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mUsing `constant` scheduler (type='constant')[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mInitializing weight broadcast (type='filesystem' save_sharded=True save_format='safetensors')[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mStarting from step 0 (total_tokens=0, total_samples=0)[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mInitializing data loader (fake=None)[0m[0m
+[default0]:[2m08:37:25[0m [1m   INFO[0m [1m[22mStarting training loop (max_steps=5)[0m[0m
+[default0]:/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/_inductor/lowering.py:7627: UserWarning: 
+[default0]:Online softmax is disabled on the fly since Inductor decides to
+[default0]:split the reduction. Cut an issue to PyTorch if this is an
+[default0]:important use case and you want to speed it up with online
+[default0]:softmax.
+[default0]:
+[default0]:  warnings.warn(
+[default0]:/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/_inductor/lowering.py:7627: UserWarning: 
+[default0]:Online softmax is disabled on the fly since Inductor decides to
+[default0]:split the reduction. Cut an issue to PyTorch if this is an
+[default0]:important use case and you want to speed it up with online
+[default0]:softmax.
+[default0]:
+[default0]:  warnings.warn(
+[default0]:[2m08:38:24[0m [32m[1mSUCCESS[0m [32m[1m[22mStep 0 | Time: 59.89s | Loss: 0.0000 | Entropy: 0.6001 | Mismatch KL: 0.0008 | Grad. Norm: 0.0003 | LR: 5.00e-06 | Throughput: 0 tokens/s | MFU: 0.0% | Peak Mem.: 17.5 GiB[0m[0m
+[default0]:[2m08:38:42[0m [32m[1mSUCCESS[0m [32m[1m[22mStep 1 | Time: 14.22s | Loss: 0.0001 | Entropy: 0.6185 | Mismatch KL: 0.0008 | Grad. Norm: 0.0720 | LR: 5.00e-06 | Throughput: 14694 tokens/s | MFU: 10.7% | Peak Mem.: 17.5 GiB[0m[0m
+[default0]:[2m08:38:58[0m [32m[1mSUCCESS[0m [32m[1m[22mStep 2 | Time: 13.74s | Loss: 0.0000 | Entropy: 0.6191 | Mismatch KL: 0.0011 | Grad. Norm: 0.0010 | LR: 5.00e-06 | Throughput: 13055 tokens/s | MFU: 9.5% | Peak Mem.: 17.5 GiB[0m[0m
+[default0]:[2m08:39:13[0m [32m[1mSUCCESS[0m [32m[1m[22mStep 3 | Time: 13.20s | Loss: 0.0004 | Entropy: 0.6177 | Mismatch KL: 0.0012 | Grad. Norm: 0.0823 | LR: 5.00e-06 | Throughput: 13715 tokens/s | MFU: 10.0% | Peak Mem.: 17.5 GiB[0m[0m
+[default0]:[2m08:39:27[0m [32m[1mSUCCESS[0m [32m[1m[22mStep 4 | Time: 11.99s | Loss: 0.0000 | Entropy: 0.6548 | Mismatch KL: 0.0012 | Grad. Norm: 0.0007 | LR: 5.00e-06 | Throughput: 14517 tokens/s | MFU: 10.6% | Peak Mem.: 17.5 GiB[0m[0m
+[default0]:[2m08:39:30[0m [1m   INFO[0m [1m[22mWriting final checkpoint[0m[0m
+[default0]:[2m08:39:44[0m [1m   INFO[0m [1m[22mWriting final weight checkpoint[0m[0m
+[default0]:[2m08:39:46[0m [1m   INFO[0m [1m[22mPeak memory: 17.5 GiB[0m[0m
+[default0]:[2m08:39:46[0m [32m[1mSUCCESS[0m [32m[1m[22mRL trainer finished![0m[0m
+[default0]:wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+[default0]:wandb: 
+[default0]:wandb: Run history:
+[default0]:wandb:            entropy/max ▃█▃▁▃
+[default0]:wandb:           entropy/mean ▁▃▃▃█
+[default0]:wandb:         entropy/median ▁▄▃▁█
+[default0]:wandb:            entropy/min ▁▁▁▁▁
+[default0]:wandb:            entropy/std ▁▃▄▆█
+[default0]:wandb:    inference_probs/max ▁▁▁▁▁
+[default0]:wandb:   inference_probs/mean █▅▆█▁
+[default0]:wandb: inference_probs/median ▆▄▆█▁
+[default0]:wandb:    inference_probs/min ▃█▁▁▁
+[default0]:wandb:    inference_probs/std ▁▄▄▃█
+[default0]:wandb:                    +59 ...
+[default0]:wandb: 
+[default0]:wandb: Run summary:
+[default0]:wandb:            entropy/max 4.48044
+[default0]:wandb:           entropy/mean 0.65475
+[default0]:wandb:         entropy/median 0.46988
+[default0]:wandb:            entropy/min 0
+[default0]:wandb:            entropy/std 0.68128
+[default0]:wandb:    inference_probs/max 1
+[default0]:wandb:   inference_probs/mean 0.70688
+[default0]:wandb: inference_probs/median 0.87307
+[default0]:wandb:    inference_probs/min 0.0
+[default0]:wandb:    inference_probs/std 0.33481
+[default0]:wandb:                    +59 ...
+[default0]:wandb: 
+[default0]:wandb: 🚀 View run smoke-rgmix-trainer at: https://wandb.ai/swish/budget-injection-smoke/runs/3nhyh0b5
+[default0]:wandb: ⭐️ View project at: https://wandb.ai/swish/budget-injection-smoke
+[default0]:wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+[default0]:wandb: Find logs at: outputs/smoke-rgmix/wandb/run-20260316_083719-3nhyh0b5/logs
+[2m08:39:55[0m [32m[1mSUCCESS[0m [32m[1m[22mRL training finished![0m[0m
+
+=== SMOKE TEST COMPLETE ===
+Time: Mon Mar 16 08:40:04 UTC 2026

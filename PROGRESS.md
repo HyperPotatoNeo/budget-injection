@@ -21,15 +21,16 @@ running, and what to do next. Update it after every significant action.
 - [x] Cloned prime-rl into `prime-rl/` subdirectory
 - [x] uv sync inside container (works, 304 packages)
 - [x] BudgetInjectionEnv imports + unit tests pass (9/9) inside container
-- [ ] Smoke test — 5-step training with countdown env (job 50123943)
-- [ ] Need rg_mix_env module (the rg-mix dataset loader from compaction-rl)
-- [ ] Verify BudgetInjectionEnv works end-to-end with prime-rl training loop
+- [x] rg-mix-env installed from PrimeIntellect hub (hyperpotatoneo/rg-mix-env)
+- [x] Smoke test PASSED (job 50126477): 5-step rg-mix-env + Qwen3-0.6B, 1 node 2+2 layout
+- [ ] Smoke test BudgetInjectionEnv end-to-end (with actual budget injection during training)
+- [ ] Full 400-step baseline run with Qwen3-4B
 
 ## What's Running
 
 | Job ID | Config | Node | Status | Notes |
 |--------|--------|------|--------|-------|
-| 50126477 | smoke_test.sh | pending | Running | rg-mix-env + Qwen3-0.6B, 5 steps, m5017 premium |
+| 50126477 | smoke_test.sh | nid008620 | COMPLETED | rg-mix-env + Qwen3-0.6B, 5 steps. SUCCESS. |
 
 <!--
 When jobs are running, update this section:
@@ -102,6 +103,10 @@ When jobs are running, update this section:
 - Fixed pyproject.toml build-backend (setuptools.build_meta).
 - Fixed PYTHONPATH issue (uv run doesn't see uv pip install -e packages).
 - Fixed missing [inference] section in configs.
-- Discovered rg_mix_env is NOT a built-in verifiers env — need custom loader.
-- Submitted countdown smoke test (job 50123943) as pipeline validation.
-- TODO: create rg_mix_env loader, test BudgetInjectionEnv end-to-end.
+- Discovered rg_mix_env is NOT a built-in verifiers env — installed rg-mix-env
+  from PrimeIntellect hub (hyperpotatoneo namespace).
+- Fixed package structure (nested layout for setuptools), PYTHONPATH issue
+  (use uv source dep instead), and [inference] section requirement.
+- Smoke test PASSED: 5 steps of rg-mix-env + Qwen3-0.6B on 1 node (2+2).
+  W&B: https://wandb.ai/swish/budget-injection-smoke/runs/3nhyh0b5
+- Next: smoke test BudgetInjectionEnv wrapper, then full Qwen3-4B runs.

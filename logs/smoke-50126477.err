@@ -87,3 +87,35 @@ echo ""
 echo "=== SMOKE TEST COMPLETE ==="
 echo "Time: $(date)"
 '
++ unset NCCL_SOCKET_IFNAME
++ export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
++ UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
++ echo '=== Step 1: uv sync ==='
++ uv sync --all-extras
+Resolved 321 packages in 1m 33s
+Audited 320 packages in 213ms
++ echo ''
++ echo '=== Step 2: Verify imports ==='
++ uv run --no-sync python -c '
+import verifiers as vf; print("verifiers OK")
+from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
+msg = _format_budget_message("absolute", 2048, 8192, 6144)
+print(f"Format: {msg}")
+import rg_mix_env; print("rg_mix_env OK")
+print("All imports OK")
+'
++ echo ''
++ echo '=== Step 3: Unit tests ==='
++ uv run --no-sync python -m pytest ../budget_injection_env/budget_injection_env/tests/ -v
++ echo ''
++ echo '=== Step 4: Smoke test (rg-mix-env, Qwen3-0.6B, 5 steps) ==='
++ cat
++ uv run --no-sync rl @ /tmp/smoke.toml
+/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/tyro/_resolver.py:601: TyroWarning: <class 'prime_rl.configs.orchestrator.DefaultAdvantageConfig'> does not match any type in Union: [<class 'types.UnionType'>, <class 'NoneType'>]
+  warnings.warn(
+/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/tyro/_parsers.py:561: UserWarning: Duplicate subcommand name detected: 'orchestrator.advantage:default-advantage-config' is already used for typing.Annotated but will be overwritten by prime_rl.configs.orchestrator.DefaultAdvantageConfig. Only the last type (prime_rl.configs.orchestrator.DefaultAdvantageConfig) will be accessible via this subcommand. Consider using distinct class names or use tyro.conf.subcommand() to specify explicit subcommand names.
+  warnings.warn(
++ echo ''
++ echo '=== SMOKE TEST COMPLETE ==='
+++ date
++ echo 'Time: Mon Mar 16 08:40:04 UTC 2026'
