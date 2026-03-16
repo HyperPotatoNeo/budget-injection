@@ -1,0 +1,63 @@
+# Run 6: INJECT-URGENCY — Urgency-graded messages that escalate as budget depletes
+# >50% remaining: "Continue reasoning. {remaining} tokens remaining."
+# 25-50%: "Begin concluding. ~{remaining} tokens remaining."
+# <25%: "Wrap up now. Only {remaining} tokens left."
+# Requires adding budget_format_type="urgency" to worker.py.
+
+max_steps = 600
+seq_len = 9216
+output_dir = "outputs/inject-urgency"
+
+[model]
+name = "Qwen/Qwen3-4B"
+
+[wandb]
+project = "budget-injection"
+name = "inject-urgency"
+
+[ckpt]
+interval = 25
+resume_step = -1
+
+[deployment]
+num_train_gpus = 4
+num_infer_gpus = 0
+
+[trainer]
+dist_timeout_seconds = 3600
+
+[trainer.model]
+impl = "auto"
+optim_cpu_offload = true
+
+[trainer.model.ac]
+freq = 1
+
+[trainer.optim]
+lr = 1e-6
+weight_decay = 0.01
+betas1 = 0.9
+betas2 = 0.9
+
+[trainer.loss]
+type = "default"
+
+[orchestrator]
+batch_size = 256
+rollouts_per_example = 8
+
+[orchestrator.client]
+base_url = [
+    "http://__INFERENCE_NODE__:8000/v1",
+    "http://__INFERENCE_NODE__:8001/v1",
+    "http://__INFERENCE_NODE__:8002/v1",
+    "http://__INFERENCE_NODE__:8003/v1",
+]
+
+[orchestrator.sampling]
+max_tokens = 8192
+
+[[orchestrator.env]]
+id = "compaction_env"
+name = "inject-urgency"
+args = { gym = "rg_mix_env", inject_only = true, inject_budget_every = 2048, max_total_tokens = 8192, max_seq_len = 9216, budget_format_type = "urgency", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
