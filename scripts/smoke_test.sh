@@ -10,7 +10,7 @@
 #SBATCH --output=/pscratch/sd/s/siddart2/budget-injection/logs/smoke-%j.out
 #SBATCH --error=/pscratch/sd/s/siddart2/budget-injection/logs/smoke-%j.err
 
-set -e
+set -ex
 
 echo "=== Budget Injection Smoke Test ==="
 echo "Node: $(hostname)"
@@ -30,43 +30,34 @@ podman-hpc run --rm \
   -v "$SCRATCH":"$SCRATCH" -v "/global/homes/s/siddart2":"/global/homes/s/siddart2" \
   -w "$SCRATCH/budget-injection/prime-rl" \
   docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 \
-  bash -c '
-set -e
+  bash -exc '
 unset NCCL_SOCKET_IFNAME
 export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
 
 echo "=== Step 1: uv sync ==="
-uv sync --all-extras 2>&1 | tail -5
+uv sync --all-extras
 
 echo ""
 echo "=== Step 2: Install BudgetInjectionEnv ==="
-uv pip install -e ../budget_injection_env 2>&1 | tail -3
+uv pip install -e ../budget_injection_env
 
 echo ""
 echo "=== Step 3: Verify imports ==="
 uv run python -c "
-import verifiers as vf
-print(\"verifiers: OK\")
-import budget_injection_env
-print(\"budget_injection_env: OK\")
+import verifiers as vf; print(\"verifiers OK\")
 from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
 msg = _format_budget_message(\"absolute\", 2048, 8192, 6144)
-print(f\"Format test: {msg}\")
-print(\"All imports OK!\")
+print(f\"Format: {msg}\")
+print(\"All imports OK\")
 "
 
 echo ""
 echo "=== Step 4: Unit tests ==="
-uv run python -m pytest ../budget_injection_env/tests/ -v 2>&1 | tail -15
+uv run python -m pytest ../budget_injection_env/tests/ -v
 
 echo ""
 echo "=== Step 5: Check dataset ==="
-if [ -d "/pscratch/sd/s/siddart2/datasets/rg_mix_7500" ]; then
-    echo "Dataset found"
-    ls /pscratch/sd/s/siddart2/datasets/rg_mix_7500/ | head -5
-else
-    echo "WARNING: Dataset not found at /pscratch/sd/s/siddart2/datasets/rg_mix_7500"
-fi
+ls /pscratch/sd/s/siddart2/datasets/rg_mix_7500/ 2>/dev/null && echo "Dataset OK" || echo "WARNING: Dataset not found"
 
 echo ""
 echo "=== Step 6: Baseline smoke test (5 steps) ==="
@@ -75,8 +66,7 @@ uv run rl @ /pscratch/sd/s/siddart2/budget-injection/configs/baseline.toml \
     output_dir=outputs/smoke-baseline \
     wandb.name=smoke-baseline \
     wandb.project=budget-injection-smoke \
-    ckpt.interval=5 \
-    2>&1 | tail -50
+    ckpt.interval=5
 
 echo ""
 echo "=== SMOKE TEST COMPLETE ==="

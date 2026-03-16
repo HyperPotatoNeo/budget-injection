@@ -2,3 +2,28 @@
 Node: nid008225
 Job ID: 50123152
 Time: Sun Mar 15 11:57:35 PM PDT 2026
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Step 1: uv sync ===
+Resolved 305 packages in 683ms
+Audited 304 packages in 222ms
+
+=== Step 2: Install BudgetInjectionEnv ===
+
+      or `uv pip install setuptools.backends` into the environment and re-run
+      with `--no-build-isolation`.
+
+=== Step 3: Verify imports ===

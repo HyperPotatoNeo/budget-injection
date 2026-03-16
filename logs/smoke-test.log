@@ -1,0 +1,37 @@
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Budget Injection Setup & Smoke Test ===
+Node: 3209197b6466
+GPUs: 4
+Time: Mon Mar 16 06:58:44 UTC 2026
+
+=== Step 1: uv sync ===
+ + xgrammar==0.1.29
+ + xxhash==3.5.0
+ + yarl==1.20.1
+ + z3-solver==4.15.4.0
+ + zipp==3.23.0
+
+=== Step 2: Install BudgetInjectionEnv ===
+
+      or `uv pip install setuptools.backends` into the environment and re-run
+      with `--no-build-isolation`.
+
+=== Step 3: Verify imports ===
+Traceback (most recent call last):
+  File "<string>", line 4, in <module>
+ModuleNotFoundError: No module named 'budget_injection_env'
+verifiers: OK
