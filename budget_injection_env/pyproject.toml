@@ -3,7 +3,7 @@ name = "budget-injection-env"
 version = "0.1.0"
 description = "Budget injection wrapper for verifiers environments"
 requires-python = ">=3.10"
-dependencies = ["verifiers"]
+dependencies = []
 
 [build-system]
 requires = ["setuptools>=64"]

@@ -1,9 +1,9 @@
 + echo '=== Budget Injection Smoke Test ==='
 ++ hostname
-+ echo 'Node: nid008316'
-+ echo 'Job ID: 50125105'
++ echo 'Node: nid008377'
++ echo 'Job ID: 50125309'
 ++ date
-+ echo 'Time: Mon Mar 16 12:54:20 AM PDT 2026'
++ echo 'Time: Mon Mar 16 12:59:25 AM PDT 2026'
 + cd /global/homes/s/siddart2
 + export HOME=/pscratch/sd/s/siddart2
 + HOME=/pscratch/sd/s/siddart2
@@ -17,7 +17,6 @@
 + podman-hpc run --rm --user 106641:106641 --replace --name budget-inject-smoke --group-add keep-groups --userns keep-id --gpu --nccl --shm-size=8g -e SCRATCH -e HOME -e WANDB_API_KEY=595199cad0de28f309ce22cb212dcbeeb21b06d8 -v /pscratch/sd/s/siddart2:/pscratch/sd/s/siddart2 -v /global/homes/s/siddart2:/global/homes/s/siddart2 -w /pscratch/sd/s/siddart2/budget-injection/prime-rl docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 bash -exc '
 unset NCCL_SOCKET_IFNAME
 export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
-export PYTHONPATH="$SCRATCH/budget-injection:$PYTHONPATH"
 
 echo "=== Step 1: uv sync ==="
 uv sync --all-extras
@@ -29,6 +28,7 @@ import verifiers as vf; print(\"verifiers OK\")
 from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
 msg = _format_budget_message(\"absolute\", 2048, 8192, 6144)
 print(f\"Format: {msg}\")
+import rg_mix_env; print(\"rg_mix_env OK\")
 print(\"All imports OK\")
 "
 
@@ -37,8 +37,50 @@ echo "=== Step 3: Unit tests ==="
 uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
 
 echo ""
-echo "=== Step 4: Baseline smoke (reverse-text, 5 steps) ==="
-uv run --no-sync rl @ $SCRATCH/budget-injection/prime-rl/examples/reverse_text/rl.toml
+echo "=== Step 4: Smoke test (rg-mix-env, Qwen3-0.6B, 5 steps) ==="
+cat > /tmp/smoke.toml << TOML_EOF
+max_steps = 5
+seq_len = 4096
+output_dir = "outputs/smoke-rgmix"
+
+[model]
+name = "Qwen/Qwen3-0.6B"
+
+[wandb]
+project = "budget-injection-smoke"
+name = "smoke-rgmix"
+
+[ckpt]
+interval = 5
+
+[deployment]
+num_train_gpus = 2
+num_infer_gpus = 2
+
+[trainer.model]
+impl = "auto"
+optim_cpu_offload = true
+
+[trainer.model.ac]
+freq = 1
+
+[trainer.optim]
+lr = 5e-6
+
+[orchestrator]
+batch_size = 64
+rollouts_per_example = 4
+
+[orchestrator.sampling]
+max_tokens = 2048
+
+[[orchestrator.env]]
+id = "rg-mix-env"
+
+[inference]
+TOML_EOF
+
+uv run --no-sync rl @ /tmp/smoke.toml
 
 echo ""
 echo "=== SMOKE TEST COMPLETE ==="
@@ -47,12 +89,43 @@ echo "Time: $(date)"
 + unset NCCL_SOCKET_IFNAME
 + export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
 + UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
-+ export PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
-+ PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
 + echo '=== Step 1: uv sync ==='
 + uv sync --all-extras
-Resolved 306 packages in 31.72s
-Audited 305 packages in 207ms
+Resolved 322 packages in 680ms
+   Building pycosat==0.6.6
+   Building cellpylib==2.4.0
+   Building zss==1.2.0
+Downloading kiwisolver (1.4MiB)
+Downloading fonttools (4.8MiB)
+Downloading matplotlib (8.3MiB)
+Downloading pyfiglet (1.0MiB)
+Downloading reasoning-gym (6.7MiB)
+ Downloading kiwisolver
+ Downloading reasoning-gym
+ Downloading fonttools
+ Downloading pyfiglet
+ Downloading matplotlib
+      Built zss==1.2.0
+      Built cellpylib==2.4.0
+      Built pycosat==0.6.6
+Prepared 16 packages in 4.32s
+Installed 16 packages in 318ms
+ + arckit==0.1.0
+ + bfi==1.0.4
+ + cellpylib==2.4.0
+ + contourpy==1.3.3
+ + cycler==0.12.1
+ + drawsvg==2.4.1
+ + fonttools==4.62.1
+ + kiwisolver==1.5.0
+ + magiccube==0.3.0
+ + matplotlib==3.10.8
+ + pycosat==0.6.6
+ + pyfiglet==1.0.2
+ + pyparsing==3.3.2
+ + reasoning-gym==0.1.24
+ + rg-mix-env==0.1.4
+ + zss==1.2.0
 + echo ''
 + echo '=== Step 2: Verify imports ==='
 + uv run --no-sync python -c '
@@ -60,14 +133,9 @@ import verifiers as vf; print("verifiers OK")
 from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
 msg = _format_budget_message("absolute", 2048, 8192, 6144)
 print(f"Format: {msg}")
+import rg_mix_env; print("rg_mix_env OK")
 print("All imports OK")
 '
-+ echo ''
-+ echo '=== Step 3: Unit tests ==='
-+ uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
-+ echo ''
-+ echo '=== Step 4: Baseline smoke (reverse-text, 5 steps) ==='
-+ uv run --no-sync rl @ /pscratch/sd/s/siddart2/budget-injection/prime-rl/examples/reverse_text/rl.toml
-/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/tyro/_resolver.py:600: TyroWarning: <class 'prime_rl.configs.orchestrator.DefaultAdvantageConfig'> does not match any type in Union: [<class 'types.UnionType'>, <class 'NoneType'>]
-  warnings.warn(
-slurmstepd: error: *** JOB 50125105 ON nid008316 CANCELLED AT 2026-03-16T07:59:58 ***
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+ModuleNotFoundError: No module named 'budget_injection_env'

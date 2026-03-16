@@ -1,0 +1,37 @@
+=== Budget Injection Smoke Test ===
+Node: nid008316
+Job ID: 50125753
+Time: Mon Mar 16 01:12:04 AM PDT 2026
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Step 1: uv sync ===
+
+=== Step 2: Verify imports ===
+verifiers OK
+Format: Budget: 2048/8192 tokens generated. ~6144 tokens remaining.
+rg_mix_env OK
+All imports OK
+
+=== Step 3: Unit tests ===
+============================= test session starts ==============================
+platform linux -- Python 3.12.11, pytest-9.0.2, pluggy-1.6.0 -- /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /pscratch/sd/s/siddart2/budget-injection/prime-rl
+configfile: pyproject.toml
+plugins: jaxtyping-0.3.9, anyio-4.12.1, typeguard-4.5.1
+collecting ... collected 0 items
+
+============================ no tests ran in 0.01s =============================

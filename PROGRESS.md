@@ -29,7 +29,7 @@ running, and what to do next. Update it after every significant action.
 
 | Job ID | Config | Node | Status | Notes |
 |--------|--------|------|--------|-------|
-| 50123943 | smoke_test.sh | pending | Running | Countdown smoke (Qwen3-0.6B, 5 steps), m5017 premium |
+| 50126477 | smoke_test.sh | pending | Running | rg-mix-env + Qwen3-0.6B, 5 steps, m5017 premium |
 
 <!--
 When jobs are running, update this section:

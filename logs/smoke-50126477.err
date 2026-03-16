@@ -1,36 +1,20 @@
-#!/bin/bash
-# Smoke test: setup prime-rl env and run 5 steps with rg-mix-env.
-#
-#SBATCH -A m5017
-#SBATCH -C "gpu&hbm80g"
-#SBATCH --qos=premium
-#SBATCH --time=02:00:00
-#SBATCH --nodes=1
-#SBATCH --gpus-per-node=4
-#SBATCH --output=/pscratch/sd/s/siddart2/budget-injection/logs/smoke-%j.out
-#SBATCH --error=/pscratch/sd/s/siddart2/budget-injection/logs/smoke-%j.err
-
-set -ex
-
-echo "=== Budget Injection Smoke Test ==="
-echo "Node: $(hostname)"
-echo "Job ID: $SLURM_JOB_ID"
-echo "Time: $(date)"
-
-cd /global/homes/s/siddart2
-export HOME=/pscratch/sd/s/siddart2
-export SCRATCH=/pscratch/sd/s/siddart2
-export PODMANHPC_PODMAN_BIN=/global/common/shared/das/podman-4.7.0/bin/podman
-cd $SCRATCH
-
-podman-hpc run --rm \
-  --user "$(id -u):$(id -g)" --replace --name budget-inject-smoke \
-  --group-add keep-groups --userns keep-id --gpu --nccl --shm-size=8g \
-  -e SCRATCH -e HOME -e WANDB_API_KEY=595199cad0de28f309ce22cb212dcbeeb21b06d8 \
-  -v "$SCRATCH":"$SCRATCH" -v "/global/homes/s/siddart2":"/global/homes/s/siddart2" \
-  -w "$SCRATCH/budget-injection/prime-rl" \
-  docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 \
-  bash -exc '
++ echo '=== Budget Injection Smoke Test ==='
+++ hostname
++ echo 'Node: nid008620'
++ echo 'Job ID: 50126477'
+++ date
++ echo 'Time: Mon Mar 16 01:32:10 AM PDT 2026'
++ cd /global/homes/s/siddart2
++ export HOME=/pscratch/sd/s/siddart2
++ HOME=/pscratch/sd/s/siddart2
++ export SCRATCH=/pscratch/sd/s/siddart2
++ SCRATCH=/pscratch/sd/s/siddart2
++ export PODMANHPC_PODMAN_BIN=/global/common/shared/das/podman-4.7.0/bin/podman
++ PODMANHPC_PODMAN_BIN=/global/common/shared/das/podman-4.7.0/bin/podman
++ cd /pscratch/sd/s/siddart2
+++ id -u
+++ id -g
++ podman-hpc run --rm --user 106641:106641 --replace --name budget-inject-smoke --group-add keep-groups --userns keep-id --gpu --nccl --shm-size=8g -e SCRATCH -e HOME -e WANDB_API_KEY=595199cad0de28f309ce22cb212dcbeeb21b06d8 -v /pscratch/sd/s/siddart2:/pscratch/sd/s/siddart2 -v /global/homes/s/siddart2:/global/homes/s/siddart2 -w /pscratch/sd/s/siddart2/budget-injection/prime-rl docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 bash -exc '
 unset NCCL_SOCKET_IFNAME
 export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
 
