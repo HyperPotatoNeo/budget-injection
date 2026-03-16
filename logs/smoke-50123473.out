@@ -1,0 +1,59 @@
+=== Budget Injection Smoke Test ===
+Node: nid008225
+Job ID: 50123473
+Time: Mon Mar 16 12:07:23 AM PDT 2026
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Step 1: uv sync ===
+
+=== Step 2: Verify imports ===
+verifiers OK
+Format: Budget: 2048/8192 tokens generated. ~6144 tokens remaining.
+All imports OK
+
+=== Step 3: Unit tests ===
+============================= test session starts ==============================
+platform linux -- Python 3.12.11, pytest-8.4.2, pluggy-1.6.0 -- /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /pscratch/sd/s/siddart2/budget-injection/budget_injection_env
+configfile: pyproject.toml
+plugins: typeguard-4.4.4, anyio-4.10.0, jaxtyping-0.3.2
+collecting ... collected 9 items
+
+../budget_injection_env/tests/test_budget_injection.py::test_absolute_format PASSED [ 11%]
+../budget_injection_env/tests/test_budget_injection.py::test_ratio_format PASSED [ 22%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_early PASSED [ 33%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_mid PASSED [ 44%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_late PASSED [ 55%]
+../budget_injection_env/tests/test_budget_injection.py::test_minimal_format PASSED [ 66%]
+../budget_injection_env/tests/test_budget_injection.py::test_custom_template PASSED [ 77%]
+../budget_injection_env/tests/test_budget_injection.py::test_zero_remaining PASSED [ 88%]
+../budget_injection_env/tests/test_budget_injection.py::test_ratio_rounding PASSED [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7
+  /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class TunnelInfo(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 9 passed, 1 warning in 2.76s =========================
+
+=== Step 4: Check dataset ===
+dataset
+metadata.json
+Dataset OK
+
+=== Step 5: Baseline smoke test (5 steps, no injection) ===

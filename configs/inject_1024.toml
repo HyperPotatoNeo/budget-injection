@@ -50,3 +50,5 @@ max_tokens = 8192
 id = "budget_injection_env"
 name = "inject-1024"
 args = { gym = "rg_mix_env", inject_budget_every = 1024, max_total_tokens = 8192, budget_message_template = "Budget: {used}/{total} tokens generated. ~{remaining} tokens remaining.", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
+
+[inference]

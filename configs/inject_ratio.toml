@@ -50,3 +50,5 @@ max_tokens = 8192
 id = "budget_injection_env"
 name = "inject-ratio"
 args = { gym = "rg_mix_env", inject_budget_every = 2048, max_total_tokens = 8192, budget_format = "ratio", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
+
+[inference]

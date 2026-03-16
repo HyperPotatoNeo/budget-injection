@@ -58,8 +58,8 @@ podman-hpc run --rm \
   docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 \
   bash -c "
     unset NCCL_SOCKET_IFNAME
-    source .venv/bin/activate
-    uv run rl @ $SCRATCH/budget-injection/${CONFIG} \
+    export PYTHONPATH=$SCRATCH/budget-injection:\$PYTHONPATH
+    uv run --no-sync rl @ $SCRATCH/budget-injection/${CONFIG} \
       output_dir=outputs/${RUN_NAME} \
       wandb.name=${RUN_NAME} \
       2>&1 | tee $SCRATCH/budget-injection/logs/${RUN_NAME}-\$(date +%Y%m%d-%H%M%S).log

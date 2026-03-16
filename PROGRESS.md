@@ -19,16 +19,17 @@ running, and what to do next. Update it after every significant action.
 - [x] Launch/monitor/resume scripts
 - [x] INSTRUCTIONS.md for future instances
 - [x] Cloned prime-rl into `prime-rl/` subdirectory
-- [ ] uv sync inside container (needs compute node)
-- [ ] Install budget_injection_env into prime-rl venv
-- [ ] Smoke test (5 steps of baseline on interactive node)
-- [ ] Verify BudgetInjectionEnv works with prime-rl training loop
+- [x] uv sync inside container (works, 304 packages)
+- [x] BudgetInjectionEnv imports + unit tests pass (9/9) inside container
+- [ ] Smoke test — 5-step training with countdown env (job 50123943)
+- [ ] Need rg_mix_env module (the rg-mix dataset loader from compaction-rl)
+- [ ] Verify BudgetInjectionEnv works end-to-end with prime-rl training loop
 
 ## What's Running
 
 | Job ID | Config | Node | Status | Notes |
 |--------|--------|------|--------|-------|
-| 50123152 | smoke_test.sh | nid008225 | Running | uv sync + 5-step baseline, m5017 premium |
+| 50123943 | smoke_test.sh | pending | Running | Countdown smoke (Qwen3-0.6B, 5 steps), m5017 premium |
 
 <!--
 When jobs are running, update this section:
@@ -73,21 +74,34 @@ When jobs are running, update this section:
 
 ## Known Issues
 
-- **BudgetInjectionEnv not yet tested with prime-rl training loop**: The MultiTurnEnv
-  approach should work but needs verification that multi-turn trajectories flow correctly
-  through the trainer (token concatenation, loss masking, etc.)
-- **rg_mix dataset**: Verify it exists at `/pscratch/sd/s/siddart2/datasets/rg_mix_7500`.
-  If not, need to generate it (check compaction-rl for how).
-- **Qwen3-4B model**: May need to be `Qwen/Qwen3-4B` or `Qwen/Qwen3-4B-Instruct-2507`.
-  Check which is available on the node's HF cache.
-- **2 inf + 2 train on 1 node**: The `[deployment] num_train_gpus=2, num_infer_gpus=2`
-  config needs verification. Prime-rl may handle GPU assignment differently than expected.
+- **rg_mix_env is NOT a built-in verifiers env**: It's a custom env from compaction-rl
+  that loads a pre-generated multi-task dataset. Need to either:
+  (a) Copy the rg_mix_env module from compaction-rl, or
+  (b) Use stock verifiers `ReasoningGymEnv` with multi-task gym config, or
+  (c) Create a small rg_mix_env loader in this project
+  Dataset exists at `/pscratch/sd/s/siddart2/datasets/rg_mix_7500/` (7500 problems,
+  5 tasks: zebra_puzzles_7, arc_1d, sokoban_hard, cryptarithm, countdown_7).
+- **PYTHONPATH for env discovery**: `uv run` doesn't see `uv pip install -e` packages.
+  Must set `PYTHONPATH=$SCRATCH/budget-injection` so verifiers' `load_environment()`
+  can find `budget_injection_env` (and eventually `rg_mix_env`).
+- **pyproject.toml build-backend**: Fixed — use `setuptools.build_meta` not
+  `setuptools.backends._legacy:_Backend`.
+- **[inference] section required**: All configs must have `[inference]` section
+  (even empty) for prime-rl to auto-start inference servers on the node.
+- **Qwen3-4B model**: Verify `Qwen/Qwen3-4B` is available. May need HuggingFace token.
 
 ## Run Log
 
-### 2026-03-16 — Instance #48: Project Setup
+### 2026-03-16 — Instance #48: Project Setup + Smoke Test Debugging
 - Created entire project: research plan, configs, env, scripts, instructions
 - Deep research: 8 web search agents found 30+ papers on budget-aware reasoning
 - Key finding: BudgetThinker (2508.17196) is closest prior work; Seed-OSS-36B is only
   shipped model with inline budget reflection
-- Cloned prime-rl. Need compute node for uv sync + smoke test.
+- Cloned prime-rl. uv sync works (304 packages from cache).
+- BudgetInjectionEnv: imports work, 9/9 unit tests pass inside container.
+- Fixed pyproject.toml build-backend (setuptools.build_meta).
+- Fixed PYTHONPATH issue (uv run doesn't see uv pip install -e packages).
+- Fixed missing [inference] section in configs.
+- Discovered rg_mix_env is NOT a built-in verifiers env — need custom loader.
+- Submitted countdown smoke test (job 50123943) as pipeline validation.
+- TODO: create rg_mix_env loader, test BudgetInjectionEnv end-to-end.

@@ -1,0 +1,96 @@
++ echo '=== Budget Injection Smoke Test ==='
+++ hostname
++ echo 'Node: nid008225'
++ echo 'Job ID: 50123598'
+++ date
++ echo 'Time: Mon Mar 16 12:11:56 AM PDT 2026'
++ cd /global/homes/s/siddart2
++ export HOME=/pscratch/sd/s/siddart2
++ HOME=/pscratch/sd/s/siddart2
++ export SCRATCH=/pscratch/sd/s/siddart2
++ SCRATCH=/pscratch/sd/s/siddart2
++ export PODMANHPC_PODMAN_BIN=/global/common/shared/das/podman-4.7.0/bin/podman
++ PODMANHPC_PODMAN_BIN=/global/common/shared/das/podman-4.7.0/bin/podman
++ cd /pscratch/sd/s/siddart2
+++ id -u
+++ id -g
++ podman-hpc run --rm --user 106641:106641 --replace --name budget-inject-smoke --group-add keep-groups --userns keep-id --gpu --nccl --shm-size=8g -e SCRATCH -e HOME -e WANDB_API_KEY=595199cad0de28f309ce22cb212dcbeeb21b06d8 -v /pscratch/sd/s/siddart2:/pscratch/sd/s/siddart2 -v /global/homes/s/siddart2:/global/homes/s/siddart2 -w /pscratch/sd/s/siddart2/budget-injection/prime-rl docker.io/novaskyai/skyrl-train-ray-2.51.1-py3.12-cu12.8 bash -exc '
+unset NCCL_SOCKET_IFNAME
+export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
+
+# Add budget_injection_env to PYTHONPATH so uv run can find it
+export PYTHONPATH="$SCRATCH/budget-injection:$PYTHONPATH"
+
+echo "=== Step 1: uv sync ==="
+uv sync --all-extras
+
+echo ""
+echo "=== Step 2: Verify imports ==="
+uv run --no-sync python -c "
+import verifiers as vf; print(\"verifiers OK\")
+from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
+msg = _format_budget_message(\"absolute\", 2048, 8192, 6144)
+print(f\"Format: {msg}\")
+print(\"All imports OK\")
+"
+
+echo ""
+echo "=== Step 3: Unit tests ==="
+uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
+
+echo ""
+echo "=== Step 4: Check dataset ==="
+ls /pscratch/sd/s/siddart2/datasets/rg_mix_7500/ 2>/dev/null && echo "Dataset OK" || echo "WARNING: Dataset not found"
+
+echo ""
+echo "=== Step 5: Baseline smoke test (5 steps, no injection) ==="
+# Create a smoke-test-specific config overlay
+cat > /tmp/smoke_override.toml << TOML_EOF
+max_steps = 5
+output_dir = "outputs/smoke-baseline"
+
+[wandb]
+name = "smoke-baseline"
+project = "budget-injection-smoke"
+
+[ckpt]
+interval = 5
+TOML_EOF
+
+uv run --no-sync rl @ /pscratch/sd/s/siddart2/budget-injection/configs/baseline.toml @ /tmp/smoke_override.toml
+
+echo ""
+echo "=== SMOKE TEST COMPLETE ==="
+echo "Time: $(date)"
+'
++ unset NCCL_SOCKET_IFNAME
++ export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
++ UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
++ export PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
++ PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
++ echo '=== Step 1: uv sync ==='
++ uv sync --all-extras
+Resolved 305 packages in 630ms
+Audited 304 packages in 199ms
++ echo ''
++ echo '=== Step 2: Verify imports ==='
++ uv run --no-sync python -c '
+import verifiers as vf; print("verifiers OK")
+from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
+msg = _format_budget_message("absolute", 2048, 8192, 6144)
+print(f"Format: {msg}")
+print("All imports OK")
+'
++ echo ''
++ echo '=== Step 3: Unit tests ==='
++ uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
++ echo ''
++ echo '=== Step 4: Check dataset ==='
++ ls /pscratch/sd/s/siddart2/datasets/rg_mix_7500/
++ echo 'Dataset OK'
++ echo ''
++ echo '=== Step 5: Baseline smoke test (5 steps, no injection) ==='
++ cat
++ uv run --no-sync rl @ /pscratch/sd/s/siddart2/budget-injection/configs/baseline.toml @ /tmp/smoke_override.toml
+/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/tyro/_resolver.py:600: TyroWarning: <class 'prime_rl.configs.orchestrator.DefaultAdvantageConfig'> does not match any type in Union: [<class 'types.UnionType'>, <class 'NoneType'>]
+  warnings.warn(

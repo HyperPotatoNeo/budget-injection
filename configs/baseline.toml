@@ -50,3 +50,5 @@ max_tokens = 8192
 id = "rg_mix_env"
 name = "rg-mix-baseline"
 args = { dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
+
+[inference]
