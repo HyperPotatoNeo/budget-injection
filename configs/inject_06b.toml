@@ -1,16 +1,16 @@
-# Run 5: INJECT-RATIO — Ratio-based budget messages
-# Tests H4. Run with 2 seeds.
+# Run 10: INJECT-0.6B — Qwen3-0.6B with budget injection. Scale comparison.
+# Lower priority. 1 seed only.
 
 max_steps = 400
 seq_len = 9216
-output_dir = "outputs/inject-ratio"
+output_dir = "outputs/inject-06b"
 
 [model]
-name = "Qwen/Qwen3-4B"
+name = "Qwen/Qwen3-0.6B"
 
 [wandb]
 project = "budget-injection"
-name = "inject-ratio"
+name = "inject-06b"
 
 [ckpt]
 interval = 30
@@ -31,7 +31,7 @@ optim_cpu_offload = true
 freq = 1
 
 [trainer.optim]
-lr = 1e-6
+lr = 5e-6
 weight_decay = 0.01
 betas1 = 0.9
 betas2 = 0.9
@@ -48,5 +48,5 @@ max_tokens = 8192
 
 [[orchestrator.env]]
 id = "budget_injection_env"
-name = "inject-ratio"
-args = { gym = "rg_mix_env", inject_budget_every = 2048, max_total_tokens = 8192, budget_format = "ratio", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
+name = "inject-06b"
+args = { gym = "rg_mix_env", inject_budget_every = 2048, max_total_tokens = 8192, budget_message_template = "Budget: {used}/{total} tokens generated. ~{remaining} tokens remaining.", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
