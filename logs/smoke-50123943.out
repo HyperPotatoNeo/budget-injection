@@ -2,3 +2,142 @@
 Node: nid008225
 Job ID: 50123943
 Time: Mon Mar 16 12:25:03 AM PDT 2026
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.8.1
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+=== Step 1: uv sync ===
+
+=== Step 2: Verify imports ===
+verifiers OK
+Format: Budget: 2048/8192 tokens generated. ~6144 tokens remaining.
+All imports OK
+
+=== Step 3: Unit tests ===
+============================= test session starts ==============================
+platform linux -- Python 3.12.11, pytest-8.4.2, pluggy-1.6.0 -- /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /pscratch/sd/s/siddart2/budget-injection/budget_injection_env
+configfile: pyproject.toml
+plugins: typeguard-4.4.4, anyio-4.10.0, jaxtyping-0.3.2
+collecting ... collected 9 items
+
+../budget_injection_env/tests/test_budget_injection.py::test_absolute_format PASSED [ 11%]
+../budget_injection_env/tests/test_budget_injection.py::test_ratio_format PASSED [ 22%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_early PASSED [ 33%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_mid PASSED [ 44%]
+../budget_injection_env/tests/test_budget_injection.py::test_urgency_late PASSED [ 55%]
+../budget_injection_env/tests/test_budget_injection.py::test_minimal_format PASSED [ 66%]
+../budget_injection_env/tests/test_budget_injection.py::test_custom_template PASSED [ 77%]
+../budget_injection_env/tests/test_budget_injection.py::test_zero_remaining PASSED [ 88%]
+../budget_injection_env/tests/test_budget_injection.py::test_ratio_rounding PASSED [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7
+  /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/prime_tunnel/models.py:7: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.12/migration/
+    class TunnelInfo(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+========================= 9 passed, 1 warning in 2.73s =========================
+
+=== Step 4: Baseline smoke (countdown, 5 steps) ===
+[2m07:27:41[0m [1m   INFO[0m [1m[22mWrote subconfigs to outputs/smoke-countdown/configs[0m[0m
+[2m07:27:41[0m [1m   INFO[0m [1m[22mUsing local->physical GPU mapping: {0: 0, 1: 1, 2: 2, 3: 3}[0m[0m
+[2m07:27:41[0m [1m   INFO[0m [1m[22mStarting RL run[0m[0m
+[2m07:27:41[0m [1m   INFO[0m [1m[22mStarting inference on GPU(s) 0 1[0m[0m
+[2m07:27:41[0m [1m   INFO[0m [1m[22mStarting orchestrator process[0m[0m
+[2m07:27:41[0m [1m   INFO[0m [1m[22mStarting trainer on GPU(s) 2 3[0m[0m
+[2m07:27:41[0m [32m[1mSUCCESS[0m [32m[1m[22mStartup complete. Showing trainer logs...[0m[0m
+W0316 07:27:45.200000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py:852] 
+W0316 07:27:45.200000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py:852] *****************************************
+W0316 07:27:45.200000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py:852] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0316 07:27:45.200000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py:852] *****************************************
+[2m07:28:05[0m [31m[1m  ERROR[0m [31m[1m[22mError: Orchestrator failed with exit code 1[0m[0m
+[2m07:28:05[0m [31m[1m  ERROR[0m [31m[1m[22mTerminating all processes...[0m[0m
+[default0]:[2m07:28:17[0m [1m   INFO[0m [1m[22mStarting RL trainer in World(world_size=2, rank=0, local_rank=0, local_world_size=2, num_nodes=1) in outputs/smoke-countdown[0m[0m
+[default0]:[2m07:28:17[0m [1m   INFO[0m [1m[22mInitializing monitor (project='budget-injection-smoke' name='smoke-countdown-trainer' offline=False id=None)[0m[0m
+[default0]:[2m07:28:17[0m [1m   INFO[0m [1m[22mInitializing WandbMonitor (project='budget-injection-smoke' name='smoke-countdown-trainer' offline=False id=None)[0m[0m
+[default0]:wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from WANDB_API_KEY.
+[default0]:wandb: Currently logged in as: siddarthegreat (swish) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+[default0]:wandb: setting up run 75l0x0bi
+[default0]:wandb: Tracking run with wandb version 0.24.2
+[default0]:wandb: Run data is saved locally in outputs/smoke-countdown/wandb/run-20260316_072818-75l0x0bi
+[default0]:wandb: Run `wandb offline` to turn off syncing.
+[default0]:wandb: Syncing run smoke-countdown-trainer
+[default0]:wandb: ⭐️ View project at https://wandb.ai/swish/budget-injection-smoke
+[default0]:wandb: 🚀 View run at https://wandb.ai/swish/budget-injection-smoke/runs/75l0x0bi
+[default0]:wandb: Detected [anthropic, mcp, openai, agents, verifiers] in use.
+[default0]:wandb: Use W&B Weave for improved LLM call tracing. Install Weave with `pip install weave` then add `import weave` to the top of your script.
+[default0]:wandb: For more information, check out the docs at: https://weave-docs.wandb.ai/
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mInitializing checkpoint managers (output_dir=None interval=5 weights=WeightCheckpointConfig(save_sharded=True, save_format='safetensors', save_adapter_separately=False) resume_step=None keep_last=None keep_interval=None skip_progress=False skip_scheduler=False skip_dataloader=False)[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mInitializing model (name='Qwen/Qwen3-0.6B' trust_remote_code=False seq_len=4096 attn='flash_attention_2' compile=None ac=ActivationCheckpointConfig(freq=1) ac_offloading=None fsdp_cpu_offload=False optim_cpu_offload=True reshard_after_forward=True dp_replicate=1 ep=1 tp=1 cp=1 impl='auto' optimization_dtype='float32' reduce_dtype='float32' moe_use_grouped_mm=True freeze_moe_router=False lora=None debug=DebugModelConfig(num_layers=None, random_init=False) fused_lm_head_token_chunk_size='disabled')[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mLoading model config (name=Qwen/Qwen3-0.6B, attn=flash_attention_2, trust_remote_code=False)[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mAuto-selected implementation: hf[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mLoading model Qwen/Qwen3-0.6B using AutoModelForCausalLM to meta device[0m[0m
+[default0]:[2m07:28:30[0m [33m[1mWARNING[0m [33m[1m[22mModel cannot be loaded using meta device because of buffers: ['model.rotary_emb.inv_freq', 'model.rotary_emb.original_inv_freq'][0m[0m
+[default0]:[2m07:28:30[0m [33m[1mWARNING[0m [33m[1m[22mCannot load model to meta device only, loading to CPU instead.[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mLoading model config (name=Qwen/Qwen3-0.6B, attn=flash_attention_2, trust_remote_code=False)[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mAuto-selected implementation: hf[0m[0m
+[default0]:[2m07:28:30[0m [1m   INFO[0m [1m[22mLoading model Qwen/Qwen3-0.6B using AutoModelForCausalLM to CPU[0m[0m
+[default0]:
+[default0]:Loading weights:   0%|          | 0/311 [00:00<?, ?it/s][default0]:
+[default0]:Loading weights:   0%|          | 1/311 [00:10<53:55, 10.44s/it][default0]:
+[default0]:Loading weights:  72%|███████▏  | 224/311 [00:10<00:02, 30.02it/s][default0]:
+[default0]:Loading weights: 100%|██████████| 311/311 [00:12<00:00, 25.00it/s]
+[default0]:The tied weights mapping and config for this model specifies to tie model.embed_tokens.weight to lm_head.weight, but both are present in the checkpoints, so we will NOT tie them. You should update the config with `tie_word_embeddings=False` to silence this warning
+[default0]:[2m07:28:44[0m [1m   INFO[0m [1m[22mInjecting vanilla LM head[0m[0m
+[default0]:[2m07:28:45[0m [1m   INFO[0m [1m[22mApplied activation checkpointing (freq=1)[0m[0m
+[default0]:[2m07:28:45[0m [1m   INFO[0m [1m[22mBuilding 1-D device mesh with ['dp_shard'], [2][0m[0m
+[default0]:[2m07:28:45[0m [33m[1mWARNING[0m [33m[1m[22mModel uses tied word embeddings, so skipping the last-layer no-reshard optimization.[0m[0m
+[default0]:[2m07:28:45[0m [1m   INFO[0m [1m[22mInitializing tokenizer (name='Qwen/Qwen3-0.6B' trust_remote_code=False chat_template=None)[0m[0m
+[default0]:Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mSetting up loss function (type='default' ipo_mask_low=0.2 ipo_mask_high=0.2 adv_tau=1.0 teacher_tau=0.0 kl_tau=0.001)[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mInitializing optimizer (lr=5e-06 weight_decay=0.01 max_norm=1.0 type='adamw' betas1=0.9 betas2=0.999)[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mWrapping optimizer with CPUOffloadOptimizer for optimizer state CPU offloading[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mUsing `constant` scheduler (type='constant')[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mInitializing weight broadcast (type='filesystem' save_sharded=True save_format='safetensors')[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mStarting from step 0 (total_tokens=0, total_samples=0)[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mInitializing data loader (fake=None)[0m[0m
+[default0]:[2m07:28:46[0m [1m   INFO[0m [1m[22mStarting training loop (max_steps=5)[0m[0m
+W0316 07:29:15.191000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py:739] Received 15 death signal, shutting down workers
+W0316 07:29:15.192000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/api.py:1010] Sending process 440 closing signal SIGTERM
+W0316 07:29:15.192000 310 prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/api.py:1010] Sending process 441 closing signal SIGTERM
+Traceback (most recent call last):
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/bin/torchrun", line 10, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py", line 991, in main
+    run(args)
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/run.py", line 982, in run
+    elastic_launch(
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/launcher/api.py", line 308, in launch_agent
+    result = agent.run()
+             ^^^^^^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/metrics/api.py", line 134, in wrapper
+    result = f(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py", line 731, in run
+    result = self._invoke_run(role)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/agent/server/api.py", line 908, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 86, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 310 got signal: 15

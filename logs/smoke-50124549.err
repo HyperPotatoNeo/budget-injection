@@ -1,9 +1,9 @@
 + echo '=== Budget Injection Smoke Test ==='
 ++ hostname
 + echo 'Node: nid008225'
-+ echo 'Job ID: 50123943'
++ echo 'Job ID: 50124549'
 ++ date
-+ echo 'Time: Mon Mar 16 12:25:03 AM PDT 2026'
++ echo 'Time: Mon Mar 16 12:33:28 AM PDT 2026'
 + cd /global/homes/s/siddart2
 + export HOME=/pscratch/sd/s/siddart2
 + HOME=/pscratch/sd/s/siddart2
@@ -93,8 +93,14 @@ echo "Time: $(date)"
 + PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
 + echo '=== Step 1: uv sync ==='
 + uv sync --all-extras
-Resolved 305 packages in 674ms
-Audited 304 packages in 200ms
+Resolved 306 packages in 1m 26s
+   Building prime-rl @ file:///pscratch/sd/s/siddart2/budget-injection/prime-rl
+      Built prime-rl @ file:///pscratch/sd/s/siddart2/budget-injection/prime-rl
+Prepared 1 package in 653ms
+Uninstalled 1 package in 11ms
+Installed 2 packages in 22ms
+ + budget-injection-env==0.1.0 (from file:///pscratch/sd/s/siddart2/budget-injection/budget_injection_env)
+ ~ prime-rl==0.4.0 (from file:///pscratch/sd/s/siddart2/budget-injection/prime-rl)
 + echo ''
 + echo '=== Step 2: Verify imports ==='
 + uv run --no-sync python -c '

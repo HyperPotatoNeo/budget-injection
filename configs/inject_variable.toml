@@ -49,6 +49,6 @@ max_tokens = 8192
 [[orchestrator.env]]
 id = "budget_injection_env"
 name = "inject-variable"
-args = { gym = "rg_mix_env", inject_budget_every = 2048, max_total_tokens = 8192, min_total_tokens = 4096, budget_message_template = "Budget: {used}/{total} tokens generated. ~{remaining} tokens remaining.", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
+args = { gym = "rg-mix-env", inject_budget_every = 2048, max_total_tokens = 8192, min_total_tokens = 4096, budget_message_template = "Budget: {used}/{total} tokens generated. ~{remaining} tokens remaining.", dataset_path = "/pscratch/sd/s/siddart2/datasets/rg_mix_7500", num_train_examples = 7500, num_eval_examples = 100 }
 
 [inference]

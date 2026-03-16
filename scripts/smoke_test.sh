@@ -1,6 +1,5 @@
 #!/bin/bash
-# Smoke test: setup prime-rl env and run 5 steps with countdown env.
-# Uses countdown (built-in verifiers env) to validate the pipeline works.
+# Smoke test: setup prime-rl env and run 5 steps with rg-mix-env.
 #
 #SBATCH -A m5017
 #SBATCH -C "gpu&hbm80g"
@@ -34,7 +33,6 @@ podman-hpc run --rm \
   bash -exc '
 unset NCCL_SOCKET_IFNAME
 export UV_CACHE_DIR=/pscratch/sd/s/siddart2/uv-cache
-export PYTHONPATH="$SCRATCH/budget-injection:$PYTHONPATH"
 
 echo "=== Step 1: uv sync ==="
 uv sync --all-extras
@@ -46,6 +44,7 @@ import verifiers as vf; print(\"verifiers OK\")
 from budget_injection_env.env import BudgetInjectionEnv, _format_budget_message
 msg = _format_budget_message(\"absolute\", 2048, 8192, 6144)
 print(f\"Format: {msg}\")
+import rg_mix_env; print(\"rg_mix_env OK\")
 print(\"All imports OK\")
 "
 
@@ -54,18 +53,18 @@ echo "=== Step 3: Unit tests ==="
 uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
 
 echo ""
-echo "=== Step 4: Baseline smoke (countdown, 5 steps) ==="
-cat > /tmp/smoke_countdown.toml << TOML_EOF
+echo "=== Step 4: Smoke test (rg-mix-env, Qwen3-0.6B, 5 steps) ==="
+cat > /tmp/smoke.toml << TOML_EOF
 max_steps = 5
 seq_len = 4096
-output_dir = "outputs/smoke-countdown"
+output_dir = "outputs/smoke-rgmix"
 
 [model]
 name = "Qwen/Qwen3-0.6B"
 
 [wandb]
 project = "budget-injection-smoke"
-name = "smoke-countdown"
+name = "smoke-rgmix"
 
 [ckpt]
 interval = 5
@@ -92,12 +91,12 @@ rollouts_per_example = 4
 max_tokens = 2048
 
 [[orchestrator.env]]
-id = "countdown"
+id = "rg-mix-env"
 
 [inference]
 TOML_EOF
 
-uv run --no-sync rl @ /tmp/smoke_countdown.toml
+uv run --no-sync rl @ /tmp/smoke.toml
 
 echo ""
 echo "=== SMOKE TEST COMPLETE ==="

@@ -1,9 +1,9 @@
 + echo '=== Budget Injection Smoke Test ==='
 ++ hostname
-+ echo 'Node: nid008225'
-+ echo 'Job ID: 50123943'
++ echo 'Node: nid008316'
++ echo 'Job ID: 50125105'
 ++ date
-+ echo 'Time: Mon Mar 16 12:25:03 AM PDT 2026'
++ echo 'Time: Mon Mar 16 12:54:20 AM PDT 2026'
 + cd /global/homes/s/siddart2
 + export HOME=/pscratch/sd/s/siddart2
 + HOME=/pscratch/sd/s/siddart2
@@ -37,50 +37,8 @@ echo "=== Step 3: Unit tests ==="
 uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
 
 echo ""
-echo "=== Step 4: Baseline smoke (countdown, 5 steps) ==="
-cat > /tmp/smoke_countdown.toml << TOML_EOF
-max_steps = 5
-seq_len = 4096
-output_dir = "outputs/smoke-countdown"
-
-[model]
-name = "Qwen/Qwen3-0.6B"
-
-[wandb]
-project = "budget-injection-smoke"
-name = "smoke-countdown"
-
-[ckpt]
-interval = 5
-
-[deployment]
-num_train_gpus = 2
-num_infer_gpus = 2
-
-[trainer.model]
-impl = "auto"
-optim_cpu_offload = true
-
-[trainer.model.ac]
-freq = 1
-
-[trainer.optim]
-lr = 5e-6
-
-[orchestrator]
-batch_size = 64
-rollouts_per_example = 4
-
-[orchestrator.sampling]
-max_tokens = 2048
-
-[[orchestrator.env]]
-id = "countdown"
-
-[inference]
-TOML_EOF
-
-uv run --no-sync rl @ /tmp/smoke_countdown.toml
+echo "=== Step 4: Baseline smoke (reverse-text, 5 steps) ==="
+uv run --no-sync rl @ $SCRATCH/budget-injection/prime-rl/examples/reverse_text/rl.toml
 
 echo ""
 echo "=== SMOKE TEST COMPLETE ==="
@@ -93,8 +51,8 @@ echo "Time: $(date)"
 + PYTHONPATH=/pscratch/sd/s/siddart2/budget-injection:
 + echo '=== Step 1: uv sync ==='
 + uv sync --all-extras
-Resolved 305 packages in 674ms
-Audited 304 packages in 200ms
+Resolved 306 packages in 31.72s
+Audited 305 packages in 207ms
 + echo ''
 + echo '=== Step 2: Verify imports ==='
 + uv run --no-sync python -c '
@@ -108,8 +66,7 @@ print("All imports OK")
 + echo '=== Step 3: Unit tests ==='
 + uv run --no-sync python -m pytest ../budget_injection_env/tests/ -v
 + echo ''
-+ echo '=== Step 4: Baseline smoke (countdown, 5 steps) ==='
-+ cat
-+ uv run --no-sync rl @ /tmp/smoke_countdown.toml
++ echo '=== Step 4: Baseline smoke (reverse-text, 5 steps) ==='
++ uv run --no-sync rl @ /pscratch/sd/s/siddart2/budget-injection/prime-rl/examples/reverse_text/rl.toml
 /pscratch/sd/s/siddart2/budget-injection/prime-rl/.venv/lib/python3.12/site-packages/tyro/_resolver.py:600: TyroWarning: <class 'prime_rl.configs.orchestrator.DefaultAdvantageConfig'> does not match any type in Union: [<class 'types.UnionType'>, <class 'NoneType'>]
   warnings.warn(
